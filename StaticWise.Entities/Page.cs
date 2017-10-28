@@ -1,0 +1,26 @@
+﻿using Newtonsoft.Json;
+
+namespace StaticWise.Entities
+{
+    public struct Page
+    {
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("friendlyUrl")]
+        public string FriendlyUrl { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("isDraft")]
+        public bool IsDraft { get; set; }
+        
+        public string MarkdownContent { get; set; }
+
+        /// <summary>
+        /// The file path including the root (e.g. "C:\website\markdown.md")
+        /// </summary>
+        public string FilePathIncRoot { get; set; }
+    }
+}
