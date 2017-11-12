@@ -123,6 +123,10 @@ namespace StaticWise.Compiler.Components.ArchivePage
             b.Append(pagination.Generate(
                 currentPage,
                 totalPosts,
+                config.Code.PaginationContainer.ElementAtOrDefault(0),
+                config.Code.PaginationContainer.ElementAtOrDefault(1),
+                config.Code.PaginationItem.ElementAtOrDefault(0),
+                config.Code.PaginationItem.ElementAtOrDefault(1),
                 config.IndexDestinationName,
                 config.ArchivePageName,
                 config.ArchiveDirectoryName));

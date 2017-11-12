@@ -34,6 +34,12 @@ namespace StaticWise.Entities
         [JsonProperty("pageTitle")]
         public string[] PageTitle { get; set; }
 
+        [JsonProperty("paginationContainer")]
+        public string[] PaginationContainer { get; set; }
+
+        [JsonProperty("paginationItem")]
+        public string[] PaginationItem { get; set; }
+
         [JsonProperty("publishedDateFormat")]
         public string PublishedDateFormat { get; set; }
 

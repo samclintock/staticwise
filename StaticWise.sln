@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWise.Console", "StaticWise.Console\StaticWise.Console.csproj", "{D47120E6-5A46-4E56-BEA4-823217789DBD}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWise.Compiler", "StaticWise.Compiler\StaticWise.Compiler.csproj", "{1C7691A7-2019-4908-8562-803893AE6A04}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWise.Entities", "StaticWise.Entities\StaticWise.Entities.csproj", "{87AE976C-9793-4EC7-8E43-6467DEA3E02A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWise.Compiler.Components.Tests", "StaticWise.Compiler.Components.Tests\StaticWise.Compiler.Components.Tests.csproj", "{98396F25-04EF-4AA8-80FD-7ED69349AADC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{87AE976C-9793-4EC7-8E43-6467DEA3E02A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87AE976C-9793-4EC7-8E43-6467DEA3E02A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87AE976C-9793-4EC7-8E43-6467DEA3E02A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98396F25-04EF-4AA8-80FD-7ED69349AADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98396F25-04EF-4AA8-80FD-7ED69349AADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98396F25-04EF-4AA8-80FD-7ED69349AADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98396F25-04EF-4AA8-80FD-7ED69349AADC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
