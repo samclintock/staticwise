@@ -44,6 +44,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 0,
                 0,
+                10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -56,6 +57,37 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 1,
                 1,
+                10,
+                CONTAINER_OPEN_HTML,
+                CONTAINER_CLOSE_HTML,
+                ITEM_OPEN_HTML,
+                ITEM_CLOSE_HTML,
+                FIRST_FILENAME,
+                ARCHIVE_FILENAME,
+                ARCHIVE_DIRECTORY_NAME)
+                .ShouldBe(string.Empty);
+        }
+
+        [TestMethod]
+        public void Generate_ShouldBeEmpty_IfTotalIsLessThanOrEqualToPaginationCount()
+        {
+            _pagination.Generate(
+                1,
+                8,
+                10,
+                CONTAINER_OPEN_HTML,
+                CONTAINER_CLOSE_HTML,
+                ITEM_OPEN_HTML,
+                ITEM_CLOSE_HTML,
+                FIRST_FILENAME,
+                ARCHIVE_FILENAME,
+                ARCHIVE_DIRECTORY_NAME)
+                .ShouldBe(string.Empty);
+
+            _pagination.Generate(
+                1,
+                10,
+                10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -88,6 +120,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 12,
                 15,
+                10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -111,6 +144,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 2,
                 2,
+                1,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -135,6 +169,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 3,
                 3,
+                1,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -160,6 +195,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 2,
                 3,
+                2,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -184,6 +220,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 3,
                 3,
+                2,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -214,6 +251,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
 
             _pagination.Generate(
                 1,
+                12,
                 10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
@@ -226,7 +264,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
         }
 
         [TestMethod]
-        public void Generate_ShouldBe10Pages_IfCurrentIs2AndTotalIs10()
+        public void Generate_ShouldBe10Pages_IfCurrentIs2AndTotalIs11()
         {
             StringBuilder b = new StringBuilder();
             b.Append(CONTAINER_OPEN_HTML);
@@ -246,6 +284,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
 
             _pagination.Generate(
                 2,
+                11,
                 10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
@@ -258,7 +297,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
         }
 
         [TestMethod]
-        public void Generate_ShouldBe10Pages_IfCurrentIs3AndTotalIs10()
+        public void Generate_ShouldBe10Pages_IfCurrentIs3AndTotalIs11()
         {
             StringBuilder b = new StringBuilder();
             b.Append(CONTAINER_OPEN_HTML);
@@ -278,6 +317,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
 
             _pagination.Generate(
                 3,
+                11,
                 10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
@@ -290,14 +330,11 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
         }
 
         [TestMethod]
-        public void Generate_ShouldBe10Pages_IfCurrentIsGreaterThan3AndTotalIs10()
+        public void Generate_ShouldBe10Pages_IfCurrentIsGreaterThan3AndTotalIs20()
         {
             StringBuilder b = new StringBuilder();
             b.Append(CONTAINER_OPEN_HTML);
             b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}7.html\">Previous</a>{ITEM_CLOSE_HTML}");
-            b.Append($"{ITEM_OPEN_HTML}<a href=\"/{FIRST_FILENAME}.html\">1</a>{ITEM_CLOSE_HTML}");
-            b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}2.html\">2</a>{ITEM_CLOSE_HTML}");
-            b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}3.html\">3</a>{ITEM_CLOSE_HTML}");
             b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}4.html\">4</a>{ITEM_CLOSE_HTML}");
             b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}5.html\">5</a>{ITEM_CLOSE_HTML}");
             b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}6.html\">6</a>{ITEM_CLOSE_HTML}");
@@ -305,11 +342,15 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             b.Append($"{ITEM_OPEN_HTML}8{ITEM_CLOSE_HTML}");
             b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}9.html\">9</a>{ITEM_CLOSE_HTML}");
             b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}10.html\">10</a>{ITEM_CLOSE_HTML}");
+            b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}11.html\">11</a>{ITEM_CLOSE_HTML}");
+            b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}12.html\">12</a>{ITEM_CLOSE_HTML}");
+            b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}13.html\">13</a>{ITEM_CLOSE_HTML}");
             b.Append($"{ITEM_OPEN_HTML}<a href=\"/{ARCHIVE_DIRECTORY_NAME}/{ARCHIVE_FILENAME}9.html\">Next</a>{ITEM_CLOSE_HTML}");
             b.Append(CONTAINER_CLOSE_HTML);
 
             _pagination.Generate(
                 8,
+                20,
                 10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
@@ -343,6 +384,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 12,
                 15,
+                10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -375,6 +417,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 9,
                 20,
+                10,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -399,6 +442,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 3,
                 3,
+                1,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,
@@ -426,6 +470,7 @@ namespace StaticWise.Compiler.Components.Tests.Pagination
             _pagination.Generate(
                 3,
                 5,
+                2,
                 CONTAINER_OPEN_HTML,
                 CONTAINER_CLOSE_HTML,
                 ITEM_OPEN_HTML,

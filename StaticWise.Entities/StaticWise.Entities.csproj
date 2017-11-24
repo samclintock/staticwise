@@ -46,7 +46,6 @@
     <Compile Include="Attr.cs" />
     <Compile Include="Code.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Directories.cs" />
     <Compile Include="Includes.cs" />
     <Compile Include="LogEntry.cs" />
     <Compile Include="LogStatus.cs" />

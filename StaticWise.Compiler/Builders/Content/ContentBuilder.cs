@@ -76,7 +76,7 @@ namespace StaticWise.Compiler.Builders.Content
                 IIndividualPost standardPost = new StandardPost(_fileManager);
                 string postSource = standardPost.Generate(post, _config);
 
-                string filePath = Path.Combine(_config.Directories.OutputDirIncRoot,
+                string filePath = Path.Combine(_config.OutputDirIncRoot,
                     $"{post.FriendlyUrl}.html");
 
                 if (_fileManager.SaveTextToFile(filePath,
@@ -105,7 +105,7 @@ namespace StaticWise.Compiler.Builders.Content
                 IIndividualPage standardPage = new StandardPage(_fileManager);
                 string pageSource = standardPage.Generate(page, _config);
 
-                string filePath = Path.Combine(_config.Directories.OutputDirIncRoot, 
+                string filePath = Path.Combine(_config.OutputDirIncRoot, 
                     $"{page.FriendlyUrl}.html");
 
                 if (_fileManager.SaveTextToFile(filePath, 
@@ -134,7 +134,7 @@ namespace StaticWise.Compiler.Builders.Content
                     int currentArchivePage = 1, currentPost = 1;
                     List<Post> currentPosts = new List<Post>();
                     string archiveDirPath = Path.Combine(
-                        _config.Directories.OutputDirIncRoot,
+                        _config.OutputDirIncRoot,
                         _config.ArchiveDirectoryName);
 
                     /*
@@ -214,13 +214,13 @@ namespace StaticWise.Compiler.Builders.Content
                     posts, currentPage, totalPosts, _config);
 
                 string filePath = Path.Combine(
-                    _config.Directories.OutputDirIncRoot, 
+                    _config.OutputDirIncRoot, 
                     $"{fileNameWithoutExt}.html");
 
                 // Alter the destination for the archive page file (if desired)
                 if (!string.IsNullOrEmpty(directoryName))
                     filePath = Path.Combine(Path.Combine(
-                        _config.Directories.OutputDirIncRoot, directoryName), 
+                        _config.OutputDirIncRoot, directoryName), 
                         $"{fileNameWithoutExt}.html");
 
                 if (_fileManager.SaveTextToFile(filePath, 

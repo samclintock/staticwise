@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 
 namespace StaticWise.Entities
 {
@@ -47,10 +48,67 @@ namespace StaticWise.Entities
         [JsonProperty("includes")]
         public Includes Includes { get; set; }
 
-        [JsonProperty("directories")]
-        public Directories Directories { get; set; }
-
         [JsonProperty("code")]
         public Code Code { get; set; }
+
+        [JsonProperty("includesDirectory")]
+        public string IncludesDirExcRoot;
+
+        [JsonProperty("scriptsDirectory")]
+        public string ScriptsDirExcRoot;
+
+        [JsonProperty("postsDirectory")]
+        public string PostsDirExcRoot;
+
+        [JsonProperty("pagesDirectory")]
+        public string PagesDirExcRoot;
+
+        [JsonProperty("mediaDirectory")]
+        public string MediaDirExcRoot;
+
+        [JsonProperty("outputDirectory")]
+        public string OutputDirExcRoot;
+
+        [JsonIgnore]
+        public string FilePath;
+
+        [JsonIgnore]
+        public string RootPath;
+
+        [JsonIgnore]
+        public string IncludesDirIncRoot
+        {
+            get { return Path.Combine(RootPath, IncludesDirExcRoot); }
+        }
+
+        [JsonIgnore]
+        public string ScriptsDirIncRoot
+        {
+            get { return Path.Combine(RootPath, ScriptsDirExcRoot); }
+        }
+
+        [JsonIgnore]
+        public string PostsDirIncRoot
+        {
+            get { return Path.Combine(RootPath, PostsDirExcRoot); }
+        }
+
+        [JsonIgnore]
+        public string PagesDirIncRoot
+        {
+            get { return Path.Combine(RootPath, PagesDirExcRoot); }
+        }
+
+        [JsonIgnore]
+        public string MediaDirIncRoot
+        {
+            get { return Path.Combine(RootPath, MediaDirExcRoot); }
+        }
+
+        [JsonIgnore]
+        public string OutputDirIncRoot
+        {
+            get { return Path.Combine(RootPath, OutputDirExcRoot); }
+        }
     }
 }

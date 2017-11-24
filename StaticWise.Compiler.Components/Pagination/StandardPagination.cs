@@ -15,6 +15,7 @@ namespace StaticWise.Compiler.Components.Pagination
         string IPagination.Generate(
             int current,
             int total,
+            int paginationCount,
             string containerOpenHtml,
             string containerCloseHtml,
             string itemOpenHtml,
@@ -23,7 +24,7 @@ namespace StaticWise.Compiler.Components.Pagination
             string archiveFileName,
             string archiveDirectoryName)
         {
-            if (total <= 1)
+            if (total <= 1 || total <= paginationCount)
                 return string.Empty;
 
             StringBuilder b = new StringBuilder();

@@ -32,7 +32,7 @@ namespace StaticWise.Compiler.Collections
                 return null;
 
             return _queryManager.SelectPosts(
-                _config.Directories.PostsDirIncRoot,
+                _config.PostsDirIncRoot,
                 _config.Code.MarkdownDateFormat)
                 .Where(x => x.IsDraft == false)
                 .OrderByDescending(x => x.Datetime)
@@ -45,7 +45,7 @@ namespace StaticWise.Compiler.Collections
                 return null;
 
             return _queryManager.SelectPages(
-                _config.Directories.PagesDirIncRoot)
+                _config.PagesDirIncRoot)
                 .Where(x => x.IsDraft == false)
                 .ToList();
         }

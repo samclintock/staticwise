@@ -19,12 +19,11 @@ namespace StaticWise.Entities
 
         [JsonProperty("isDraft")]
         public bool IsDraft { get; set; }
+        
+        [JsonIgnore]
+        public string FileContent { get; set; }
 
-        public string MarkdownContent { get; set; }
-
-        /// <summary>
-        /// The file path including the root (e.g. "C:\website\markdown.md")
-        /// </summary>
-        public string FilePathIncRoot { get; set; }
+        [JsonIgnore]
+        public string FilePath { get; set; }
     }
 }

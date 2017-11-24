@@ -53,7 +53,7 @@ namespace StaticWise.Compiler.Builders.Feeds
                 string pageSource = atom.Generate(
                     posts, _config.DomainName, _config.Title, _config.Description);
 
-                string filePath = Path.Combine(_config.Directories.OutputDirIncRoot,
+                string filePath = Path.Combine(_config.OutputDirIncRoot,
                         $"{_config.FeedDestinationName}.xml");
                 if (_fileManager.SaveTextToFile(filePath, pageSource))
                     _log.Info($"Created feed file \"{filePath}\" with a total of {posts.Count()} entries");
@@ -70,7 +70,7 @@ namespace StaticWise.Compiler.Builders.Feeds
                 string pageSource = sitemap.Generate(entries, _config.DomainName);
 
                 string filePath = Path.Combine(
-                    _config.Directories.OutputDirIncRoot, SITEMAP_FILE);
+                    _config.OutputDirIncRoot, SITEMAP_FILE);
                 if (_fileManager.SaveTextToFile(filePath, pageSource))
                     _log.Info($"Created sitemap file \"{filePath}\" with a total of {entries.Count()} entries");
                 else

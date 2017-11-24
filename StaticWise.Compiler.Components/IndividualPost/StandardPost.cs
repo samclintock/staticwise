@@ -79,7 +79,7 @@ namespace StaticWise.Compiler.Components.IndividualPost
                     if (!string.IsNullOrEmpty(css))
                         b.Append($"<link rel=\"stylesheet\" href=\"{css}\" />");
 
-            if (!string.IsNullOrEmpty(config.Directories.RootPath) &&
+            if (!string.IsNullOrEmpty(config.RootPath) &&
                 config.Scripts.InternalCSS != null && config.Scripts.InternalCSS.Any())
             {
                 StringBuilder cssBuilder = new StringBuilder();
@@ -87,7 +87,7 @@ namespace StaticWise.Compiler.Components.IndividualPost
                 foreach (string css in config.Scripts.InternalCSS)
                     if (!string.IsNullOrEmpty(css))
                         cssBuilder.Append(_fileManager.GetTextFromFile(
-                            Path.Combine(config.Directories.ScriptsDirIncRoot, css)));
+                            Path.Combine(config.ScriptsDirIncRoot, css)));
 
                 b.Append($"<style type=\"text/css\">{cssBuilder.ToString()}</style>");
             }
@@ -99,14 +99,14 @@ namespace StaticWise.Compiler.Components.IndividualPost
                 b.Append(config.Code.Body.ElementAtOrDefault(0));
 
             b.Append(_fileManager.GetTextFromFile(
-                Path.Combine(config.Directories.IncludesDirIncRoot,
+                Path.Combine(config.IncludesDirIncRoot,
                 config.Includes.SiteHeader)));
 
             if (!string.IsNullOrEmpty(config.Code.IndividualPostContainer.ElementAtOrDefault(0)))
                 b.Append(config.Code.IndividualPostContainer.ElementAtOrDefault(0));
 
             b.Append(_fileManager.GetTextFromFile(
-                Path.Combine(config.Directories.IncludesDirIncRoot,
+                Path.Combine(config.IncludesDirIncRoot,
                 config.Includes.PostHeader)));
 
             if (!string.IsNullOrEmpty(config.Code.IndividualPostTitle.ElementAtOrDefault(0))
@@ -123,18 +123,18 @@ namespace StaticWise.Compiler.Components.IndividualPost
                 b.Append($"<time datetime=\"{post.Datetime.ToString(TIME_DATE_FORMAT)}\">{publishedText}</time>");
             }
 
-            if (!string.IsNullOrEmpty(post.MarkdownContent))
-                b.Append(Markdown.ToHtml(post.MarkdownContent));
+            if (!string.IsNullOrEmpty(post.FileContent))
+                b.Append(Markdown.ToHtml(post.FileContent));
 
             b.Append(_fileManager.GetTextFromFile(
-                Path.Combine(config.Directories.IncludesDirIncRoot,
+                Path.Combine(config.IncludesDirIncRoot,
                 config.Includes.PostFooter)));
 
             if (!string.IsNullOrEmpty(config.Code.IndividualPostContainer.ElementAtOrDefault(1)))
                 b.Append(config.Code.IndividualPostContainer.ElementAtOrDefault(1));
 
             b.Append(_fileManager.GetTextFromFile(
-                Path.Combine(config.Directories.IncludesDirIncRoot,
+                Path.Combine(config.IncludesDirIncRoot,
                 config.Includes.SiteFooter)));
 
             if (config.Scripts.ExternalJS != null && config.Scripts.ExternalJS.Any())
@@ -142,7 +142,7 @@ namespace StaticWise.Compiler.Components.IndividualPost
                     if (!string.IsNullOrEmpty(js))
                         b.Append($"<script type=\"text/javascript\" src=\"{js}\" />");
 
-            if (!string.IsNullOrEmpty(config.Directories.RootPath) &&
+            if (!string.IsNullOrEmpty(config.RootPath) &&
                 config.Scripts.InternalJS != null && config.Scripts.InternalJS.Any())
             {
                 StringBuilder jsBuilder = new StringBuilder();
@@ -150,7 +150,7 @@ namespace StaticWise.Compiler.Components.IndividualPost
                 foreach (string js in config.Scripts.InternalJS)
                     if (!string.IsNullOrEmpty(js))
                         jsBuilder.Append(_fileManager.GetTextFromFile(
-                            Path.Combine(config.Directories.ScriptsDirIncRoot, js)));
+                            Path.Combine(config.ScriptsDirIncRoot, js)));
 
                 b.Append($"<script type=\"text/javascript\">{jsBuilder.ToString()}</script>");
             }

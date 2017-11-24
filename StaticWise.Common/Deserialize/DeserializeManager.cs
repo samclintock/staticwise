@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Text.RegularExpressions;
 using StaticWise.Common.Files;
+using System.IO;
 
 namespace StaticWise.Common.Deserialize
 {
@@ -10,7 +11,7 @@ namespace StaticWise.Common.Deserialize
     {
         #region Constants
 
-        private const string JSON_FRONT_MATTER = @"^(\{[\s\S]*?\n\})(\s*\n)*";
+        private const string REGEX_FRONT_MATTER = @"^(\{[\s\S]*?\n\})(\s*\n)*";
 
         #endregion
 
@@ -40,10 +41,16 @@ namespace StaticWise.Common.Deserialize
             {
                 string json = _fileManager.GetTextFromFile(filePath);
 
-                if (string.IsNullOrEmpty(json))
-                    return new Config();
+                if (!string.IsNullOrEmpty(json))
+                {
+                    Config config = JsonConvert.DeserializeObject<Config>(json);
+                    config.RootPath = Path.GetDirectoryName(filePath);
+                    config.FilePath = filePath;
+
+                    return config;
+                }
                 else
-                    return JsonConvert.DeserializeObject<Config>(json);
+                    return new Config();
             }
             catch
             {
@@ -64,15 +71,15 @@ namespace StaticWise.Common.Deserialize
                     return new Post();
 
                 Match match = Regex.Match(content,
-                    JSON_FRONT_MATTER,
+                    REGEX_FRONT_MATTER,
                     RegexOptions.IgnoreCase);
 
                 if (match.Success)
                 {
                     Post post = JsonConvert.DeserializeObject<Post>(match.Value,
                         new IsoDateTimeConverter { DateTimeFormat = dateFormat });
-                    post.MarkdownContent = content.Replace(match.Value, string.Empty);
-                    post.FilePathIncRoot = filePath;
+                    post.FileContent = content.Replace(match.Value, string.Empty);
+                    post.FilePath = filePath;
 
                     return post;
                 }
@@ -98,14 +105,14 @@ namespace StaticWise.Common.Deserialize
                     return new Page();
 
                 Match match = Regex.Match(content,
-                    JSON_FRONT_MATTER, 
+                    REGEX_FRONT_MATTER, 
                     RegexOptions.IgnoreCase);
 
                 if (match.Success)
                 {
                     Page page = JsonConvert.DeserializeObject<Page>(match.Value);
-                    page.MarkdownContent = content.Replace(match.Value, string.Empty);
-                    page.FilePathIncRoot = filePath;
+                    page.FileContent = content.Replace(match.Value, string.Empty);
+                    page.FilePath = filePath;
 
                     return page;
                 }

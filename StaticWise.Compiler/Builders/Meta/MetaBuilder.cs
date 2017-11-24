@@ -49,7 +49,7 @@ namespace StaticWise.Compiler.Builders.Meta
             b.Append($"Sitemap: {_urlManager.CreateUrl(_config.DomainName, SITEMAP_FILE)}");
 
             string filePath = Path.Combine(
-                _config.Directories.OutputDirIncRoot, ROBOTS_FILE);
+                _config.OutputDirIncRoot, ROBOTS_FILE);
             if (_fileManager.SaveTextToFile(filePath, b.ToString()))
                 _log.Info($"Created robots file: \"{filePath}\"");
             else

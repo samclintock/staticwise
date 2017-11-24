@@ -73,7 +73,7 @@ namespace StaticWise.Compiler.Components.IndividualPage
                     if (!string.IsNullOrEmpty(css))
                         b.Append($"<link rel=\"stylesheet\" href=\"{css}\" />");
 
-            if (!string.IsNullOrEmpty(config.Directories.RootPath) &&
+            if (!string.IsNullOrEmpty(config.RootPath) &&
                 config.Scripts.InternalCSS != null && config.Scripts.InternalCSS.Any())
             {
                 StringBuilder cssBuilder = new StringBuilder();
@@ -81,7 +81,7 @@ namespace StaticWise.Compiler.Components.IndividualPage
                 foreach (string css in config.Scripts.InternalCSS)
                     if (!string.IsNullOrEmpty(css))
                             cssBuilder.Append(_fileManager.GetTextFromFile(
-                                Path.Combine(config.Directories.ScriptsDirIncRoot, css)));
+                                Path.Combine(config.ScriptsDirIncRoot, css)));
 
                 b.Append($"<style type=\"text/css\">{cssBuilder.ToString()}</style>");
             }
@@ -93,7 +93,7 @@ namespace StaticWise.Compiler.Components.IndividualPage
                 b.Append(config.Code.Body.ElementAtOrDefault(0));
 
             b.Append(_fileManager.GetTextFromFile(
-                Path.Combine(config.Directories.IncludesDirIncRoot, 
+                Path.Combine(config.IncludesDirIncRoot, 
                 config.Includes.SiteHeader)));
 
             if (!string.IsNullOrEmpty(config.Code.PageContainer.ElementAtOrDefault(0)))
@@ -106,14 +106,14 @@ namespace StaticWise.Compiler.Components.IndividualPage
                     page.Title,
                     config.Code.PageTitle.ElementAtOrDefault(1)));
 
-            if (!string.IsNullOrEmpty(page.MarkdownContent))
-                b.Append(Markdown.ToHtml(page.MarkdownContent));
+            if (!string.IsNullOrEmpty(page.FileContent))
+                b.Append(Markdown.ToHtml(page.FileContent));
 
             if (!string.IsNullOrEmpty(config.Code.PageContainer.ElementAtOrDefault(1)))
                 b.Append(config.Code.PageContainer.ElementAtOrDefault(1));
 
             b.Append(_fileManager.GetTextFromFile(
-                Path.Combine(config.Directories.IncludesDirIncRoot,
+                Path.Combine(config.IncludesDirIncRoot,
                 config.Includes.SiteFooter)));
 
             if (config.Scripts.ExternalJS != null && config.Scripts.ExternalJS.Any())
@@ -121,7 +121,7 @@ namespace StaticWise.Compiler.Components.IndividualPage
                     if (!string.IsNullOrEmpty(js))
                         b.Append($"<script type=\"text/javascript\" src=\"{js}\" />");
 
-            if (!string.IsNullOrEmpty(config.Directories.RootPath) &&
+            if (!string.IsNullOrEmpty(config.RootPath) &&
                 config.Scripts.InternalJS != null && config.Scripts.InternalJS.Any())
             {
                 StringBuilder jsBuilder = new StringBuilder();
@@ -129,7 +129,7 @@ namespace StaticWise.Compiler.Components.IndividualPage
                 foreach (string js in config.Scripts.InternalJS)
                     if (!string.IsNullOrEmpty(js))
                         jsBuilder.Append(_fileManager.GetTextFromFile(
-                            Path.Combine(config.Directories.ScriptsDirIncRoot, js)));
+                            Path.Combine(config.ScriptsDirIncRoot, js)));
 
                 b.Append($"<script type=\"text/javascript\">{jsBuilder.ToString()}</script>");
             }

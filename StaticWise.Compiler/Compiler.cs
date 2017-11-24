@@ -36,7 +36,7 @@ namespace StaticWise.Compiler
             IQueryManager queryManager,
             IUrlManager urlManager)
         {
-            if (!string.IsNullOrEmpty(config.Directories.RootPath) &&
+            if (!string.IsNullOrEmpty(config.RootPath) &&
                 log != null &&
                 fileManager != null &&
                 queryManager != null &&
@@ -59,7 +59,7 @@ namespace StaticWise.Compiler
         /// </summary>
         public void Build()
         {
-            if (!string.IsNullOrEmpty(_config.Directories.RootPath))
+            if (!string.IsNullOrEmpty(_config.RootPath))
             {
                 IContentEntries contentEntries = new ContentEntries(
                     _queryManager, _config);
@@ -113,7 +113,7 @@ namespace StaticWise.Compiler
                 try
                 {
                     IEnumerable<string> oldEntries =
-                        Directory.EnumerateFiles(_config.Directories.OutputDirIncRoot, "*html")
+                        Directory.EnumerateFiles(_config.OutputDirIncRoot, "*html")
                         .Select(Path.GetFileName);
 
                     IEnumerable<string> deleteEntries = oldEntries.Except(
@@ -123,7 +123,7 @@ namespace StaticWise.Compiler
                     {
                         foreach (var entry in deleteEntries)
                         {
-                            _fileManager.DeleteFile(Path.Combine(_config.Directories.OutputDirIncRoot, entry));
+                            _fileManager.DeleteFile(Path.Combine(_config.OutputDirIncRoot, entry));
                         }
                     }
 

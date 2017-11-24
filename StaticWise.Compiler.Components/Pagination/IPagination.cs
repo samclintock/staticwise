@@ -7,6 +7,7 @@
         /// </summary>
         /// <param name="current">The number of the current page where the navigation is being displayed</param>
         /// <param name="total">The total number of posts</param>
+        /// <param name="paginationCount">The number of posts per page</param>
         /// <param name="containerOpenHtml">HTML to open a pagination container ("<ul>")</param>
         /// <param name="containerCloseHtml">HTML to close a pagination container ("</ul>")</param>
         /// <param name="itemOpenHtml">HTML to open a pagination item ("<li>")</param>
@@ -18,6 +19,7 @@
         string Generate(
             int current,
             int total,
+            int paginationCount,
             string containerOpenHtml,
             string containerCloseHtml,
             string itemOpenHtml,

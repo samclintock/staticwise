@@ -31,8 +31,8 @@ namespace StaticWise.Compiler.Copiers
         void ICopyFiles.CopyMediaDirectory()
         {
             if (_fileManager.CopyDirectory(
-                _config.Directories.MediaDirIncRoot,
-                Path.Combine(_config.Directories.OutputDirIncRoot, _config.MediaDestinationName)))
+                _config.MediaDirIncRoot,
+                Path.Combine(_config.OutputDirIncRoot, _config.MediaDestinationName)))
                 _log.Info("Transferred the media directory to the output directory");
             else
                 _log.Error("Unable to transfer the media directory. Please check you have sufficient permission");
@@ -40,8 +40,8 @@ namespace StaticWise.Compiler.Copiers
 
         void ICopyFiles.CopyFaviconFile()
         {
-            if (_fileManager.CopyFile(Path.Combine(_config.Directories.RootPath, _config.Favicon),
-                Path.Combine(_config.Directories.OutputDirIncRoot, _config.Favicon)))
+            if (_fileManager.CopyFile(Path.Combine(_config.RootPath, _config.Favicon),
+                Path.Combine(_config.OutputDirIncRoot, _config.Favicon)))
                 _log.Info("Transferred the favicon file to the output directory");
             else
                 _log.Error("Unable to transfer the favicon file. Please check you have sufficient permission");

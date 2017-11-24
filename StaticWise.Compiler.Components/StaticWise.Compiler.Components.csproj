@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Markdig, Version=0.13.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Markdig.0.13.0\lib\net40\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.14.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Markdig.0.14.6\lib\net40\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,9 +60,6 @@
     <Compile Include="Sitemap\StandardSitemap.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\StaticWise.Common\StaticWise.Common.csproj">
       <Project>{37BD1E3B-CC47-44DC-89BC-B24AE422C356}</Project>
       <Name>StaticWise.Common</Name>
@@ -71,6 +68,9 @@
       <Project>{87ae976c-9793-4ec7-8e43-6467dea3e02a}</Project>
       <Name>StaticWise.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
