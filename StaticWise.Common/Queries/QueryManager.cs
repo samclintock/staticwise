@@ -30,7 +30,7 @@ namespace StaticWise.Common.Queries
 
         #region Methods
 
-        List<Post> IQueryManager.SelectPosts(string path, string markdownDateFormat)
+        List<Post> IQueryManager.SelectPosts(string path, string sourceDateFormat)
         {
             List<Post> result = new List<Post>();
             
@@ -42,7 +42,7 @@ namespace StaticWise.Common.Queries
                     foreach (string p in posts)
                     {
                         result.Add(_deserializeManager.DeserializePost(
-                            p, markdownDateFormat));
+                            p, sourceDateFormat));
                     };
                 }
             }

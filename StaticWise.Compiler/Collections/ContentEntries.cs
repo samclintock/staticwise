@@ -33,7 +33,7 @@ namespace StaticWise.Compiler.Collections
 
             return _queryManager.SelectPosts(
                 _config.PostsDirIncRoot,
-                _config.Code.MarkdownDateFormat)
+                _config.Code.SourceDateFormat)
                 .Where(x => x.IsDraft == false)
                 .OrderByDescending(x => x.Datetime)
                 .ToList();

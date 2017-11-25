@@ -49,7 +49,7 @@ namespace StaticWise.Entities
         [JsonProperty("readMoreText")]
         public string ReadMoreText { get; set; }
 
-        [JsonProperty("markdownDateFormat")]
-        public string MarkdownDateFormat { get; set; }
+        [JsonProperty("sourceDateFormat")]
+        public string SourceDateFormat { get; set; }
     }
 }
