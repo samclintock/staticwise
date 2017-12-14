@@ -125,103 +125,29 @@ namespace StaticWise.Compiler.Builders.Content
             return result;
         }
 
-        void IContentBuilder.BuildArchive(List<Post> posts)
-        {
-            if (posts != null)
-            {
-                try
-                {
-                    int currentArchivePage = 1, currentPost = 1;
-                    List<Post> currentPosts = new List<Post>();
-                    string archiveDirPath = Path.Combine(
-                        _config.OutputDirIncRoot,
-                        _config.ArchiveDirectoryName);
-
-                    /*
-                     * Delete the archive directory, 
-                     * only if it already exists.
-                     */
-                    if (_fileManager.IsExistingDirectory(archiveDirPath))
-                        _fileManager.DeleteDirectory(archiveDirPath);
-
-                    // Create a new archive directory (if one is necessary)
-                    if (posts.Count > _config.PaginationCount)
-                        _fileManager.CreateDirectory(archiveDirPath);
-
-                    foreach (Post post in posts)
-                    {
-                        currentPosts.Add(post);
-
-                        /*
-                         * Only create and save a new file when all 
-                         * pages for a archive page are ready,
-                         * or alternatively, when we've hit the last
-                         * post in the collection.
-                         */
-                        if ((currentPosts.Count == _config.PaginationCount) 
-                            || (currentPost == posts.Count))
-                        {
-                            /*
-                             * Either save a new archive page, (e.g. 
-                             * "archive/page2.html"), or save the file 
-                             * as the blog, news or homepage (e.g. 
-                             * "index.html").
-                             */
-                            if (currentPost > _config.PaginationCount)
-                                ((IContentBuilder)this).BuildHomepage(
-                                    currentPosts,
-                                    $"{_config.ArchivePageName}{currentArchivePage}",
-                                    posts.Count,
-                                    currentPost,
-                                    _config.ArchiveDirectoryName);
-                            else
-                                ((IContentBuilder)this).BuildHomepage(
-                                    currentPosts,
-                                    _config.IndexDestinationName,
-                                    posts.Count,
-                                    currentPost);
-
-                            /* Once the current posts for the current archive 
-                             * page have been saved to a new file, empty the 
-                             * collection and start again.
-                             */
-                            currentPosts.Clear();
-
-                            currentArchivePage++;
-                        }
-
-                        currentPost++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _log.Error($"Unable to generate an archive page. Error: {ex.Message}");
-                }
-            }
-        }
-
-        void IContentBuilder.BuildHomepage(
+        void IContentBuilder.BuildArchivePage(
             List<Post> posts, 
-            string fileNameWithoutExt,
+            string friendlyUrl,
             int currentPage,
             int totalPosts,
+            int paginationCount,
             string directoryName)
         {
-            if (!(posts == null || string.IsNullOrEmpty(fileNameWithoutExt)))
+            if (!(posts == null || string.IsNullOrEmpty(friendlyUrl)))
             {
                 IArchivePage standardArchive = new StandardArchivePage(_fileManager);
                 string pageSource = standardArchive.Generate(
-                    posts, currentPage, totalPosts, _config);
+                    posts, currentPage, totalPosts, paginationCount, _config);
 
                 string filePath = Path.Combine(
                     _config.OutputDirIncRoot, 
-                    $"{fileNameWithoutExt}.html");
+                    $"{friendlyUrl}.html");
 
                 // Alter the destination for the archive page file (if desired)
                 if (!string.IsNullOrEmpty(directoryName))
                     filePath = Path.Combine(Path.Combine(
                         _config.OutputDirIncRoot, directoryName), 
-                        $"{fileNameWithoutExt}.html");
+                        $"{friendlyUrl}.html");
 
                 if (_fileManager.SaveTextToFile(filePath, 
                     _fileManager.CompressHtml(pageSource)))

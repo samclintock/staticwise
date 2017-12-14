@@ -26,7 +26,7 @@ namespace StaticWise
             {
                 IFileManager fileManager = new FileManager();
                 IDeserializeManager deserializeManager = new DeserializeManager(fileManager);
-                IQueryManager queryManager = new QueryManager(deserializeManager);
+                IQueryManager queryManager = new QueryManager(deserializeManager, fileManager);
                 IUrlManager urlManager = new UrlManager();
 
                 Config config = deserializeManager.DeserializeConfig(pathToConfig);

@@ -18,9 +18,6 @@ namespace StaticWise.Entities
         [JsonProperty("favicon")]
         public string Favicon { get; set; }
 
-        [JsonProperty("paginationCount")]
-        public int PaginationCount { get; set; }
-
         [JsonProperty("feedEntryCount")]
         public int FeedEntryCount { get; set; }
 

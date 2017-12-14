@@ -32,6 +32,7 @@ namespace StaticWise.Compiler.Components.ArchivePage
             List<Post> posts,
             int currentPage,
             int totalPosts,
+            int paginationCount,
             Config config)
         {
             if (posts == null)
@@ -123,7 +124,7 @@ namespace StaticWise.Compiler.Components.ArchivePage
             b.Append(pagination.Generate(
                 currentPage,
                 totalPosts,
-                config.PaginationCount,
+                paginationCount,
                 config.Code.PaginationContainer.ElementAtOrDefault(0),
                 config.Code.PaginationContainer.ElementAtOrDefault(1),
                 config.Code.PaginationItem.ElementAtOrDefault(0),

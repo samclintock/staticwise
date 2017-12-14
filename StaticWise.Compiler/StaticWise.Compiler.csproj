@@ -46,8 +46,6 @@
     <Compile Include="Builders\Feeds\IFeedBuilder.cs" />
     <Compile Include="Builders\Meta\IMetaBuilder.cs" />
     <Compile Include="Builders\Meta\MetaBuilder.cs" />
-    <Compile Include="Collections\ContentEntries.cs" />
-    <Compile Include="Collections\IContentEntries.cs" />
     <Compile Include="Compiler.cs" />
     <Compile Include="Copiers\CopyFiles.cs" />
     <Compile Include="Copiers\ICopyFiles.cs" />

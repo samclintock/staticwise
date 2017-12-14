@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using StaticWise.Compiler.Copiers;
 using StaticWise.Compiler.Builders.Content;
-using StaticWise.Compiler.Collections;
 using StaticWise.Compiler.Builders.Feeds;
 using StaticWise.Compiler.Builders.Meta;
 using StaticWise.Common.Urls;
@@ -17,6 +16,12 @@ namespace StaticWise.Compiler
 {
     public class Compile
     {
+        #region Constants
+
+        int PAGE_SIZE = 5;
+
+        #endregion
+
         #region Properties
 
         Config _config;
@@ -61,28 +66,79 @@ namespace StaticWise.Compiler
         {
             if (!string.IsNullOrEmpty(_config.RootPath))
             {
-                IContentEntries contentEntries = new ContentEntries(
-                    _queryManager, _config);
-                List<Page> pages = contentEntries.GetPublishablePages();
-                List<Post> posts = contentEntries.GetPublishablePosts();
-                List<string> newEntries = contentEntries.CombineContentEntries(
-                    pages, posts);
+                IContentBuilder contentBuilder = new ContentBuilder(_log, _fileManager, _config);
+                List<string> newUserEntries = new List<string>();
+                int totalPageResult = 0, pageOffset = 0, lastPageCount = 0;
+
+                do
+                {
+                    List<Page> pages = _queryManager.SelectPages(
+                        _config.PagesDirIncRoot, pageOffset, PAGE_SIZE);
+                    newUserEntries.AddRange(pages.Select(x => $"{x.FriendlyUrl}.html").ToArray());
+                    totalPageResult = totalPageResult + contentBuilder.BuildPages(pages);
+                    lastPageCount = pages.Count();
+                    pageOffset = pageOffset + lastPageCount;
+                } while (lastPageCount >= PAGE_SIZE);
+
+                int totalPostResult = 0, postOffset = 0, lastPostCount = 0, archiveCount = 1;
+                string archiveDirPath = Path.Combine(_config.OutputDirIncRoot,_config.ArchiveDirectoryName);
+
+                // Delete the archive directory, only if it already exists
+                if (_fileManager.IsExistingDirectory(archiveDirPath))
+                    _fileManager.DeleteDirectory(archiveDirPath);
+
+                // Get the total number of posts (exclude draft posts)
+                int totalPosts = _queryManager.TotalPosts(
+                    _config.PostsDirIncRoot, false, _config.Code.SourceDateFormat);
+
+                // Create a new archive directory (if one is necessary)
+                if (totalPosts > PAGE_SIZE)
+                    _fileManager.CreateDirectory(archiveDirPath);
+
+                do
+                {
+                    List<Post> posts = _queryManager.SelectPosts(
+                        _config.PostsDirIncRoot, postOffset, PAGE_SIZE, false, _config.Code.SourceDateFormat);
+                    newUserEntries.AddRange(posts.Select(x => $"{x.FriendlyUrl}.html").ToArray());
+                    totalPostResult = totalPostResult + contentBuilder.BuildPosts(posts);
+                    lastPostCount = posts.Count();
+                    postOffset = postOffset + lastPostCount;
+                    
+                    /*
+                     * Either save a new archive page, (e.g. 
+                     * "archive/page2.html"), or save the file 
+                     * as the blog, news or homepage (e.g. 
+                     * "index.html").
+                     */
+                    if (archiveCount > 1)
+                        contentBuilder.BuildArchivePage(
+                            posts,
+                            $"{_config.ArchivePageName}{archiveCount}",
+                            archiveCount,
+                            totalPosts,
+                            PAGE_SIZE,
+                            _config.ArchiveDirectoryName);
+                    else
+                        contentBuilder.BuildArchivePage(
+                            posts,
+                            _config.IndexDestinationName,
+                            archiveCount,
+                            totalPosts,
+                            PAGE_SIZE);
+
+                    archiveCount++;
+                } while (lastPostCount >= PAGE_SIZE);
+
+                CleanOutputDirectory(newUserEntries);
                 
-                CleanOutputDirectory(newEntries);
+                List<Post> feedEntries = _queryManager.SelectPosts(
+                    _config.PostsDirIncRoot, 0, _config.FeedEntryCount, false, _config.Code.SourceDateFormat);
 
-                IContentBuilder contentBuilder = new ContentBuilder(
-                    _log, _fileManager, _config);
-                int builtPosts = contentBuilder.BuildPosts(posts);
-                int builtPages = contentBuilder.BuildPages(pages);
-                contentBuilder.BuildArchive(posts.ToList());
+                IFeedBuilder feedBuilder = new FeedBuilder(_fileManager, _urlManager, _log, _config);
+                feedBuilder.BuildAtom(feedEntries);
+                feedBuilder.BuildSitemap(newUserEntries);
 
-                IFeedBuilder feedBuilder = new FeedBuilder(
-                    _fileManager, _urlManager, _log, _config);
-                feedBuilder.BuildAtom(posts.Take(_config.FeedEntryCount).ToList());
-                feedBuilder.BuildSitemap(newEntries);
-
-                IMetaBuilder metaBuilder = new MetaBuilder(
-                    _urlManager, _fileManager, _log, _config);
+                IMetaBuilder metaBuilder = new MetaBuilder(_urlManager, _fileManager, _log, _config);
                 metaBuilder.BuildRobots();
 
                 ICopyFiles copyFiles = new CopyFiles(_fileManager, _log, _config);
@@ -90,7 +146,7 @@ namespace StaticWise.Compiler
                 copyFiles.CopyFaviconFile();
 
                 if (_log != null)
-                    _log.Info($"Created a total of {builtPosts} posts and {builtPages} pages");
+                    _log.Info($"Created a total of {totalPostResult} posts and {totalPageResult} pages");
             }
             else
                 throw new Exception("Please check the directory structure is setup correctly in the configuration file");
@@ -102,36 +158,25 @@ namespace StaticWise.Compiler
         /// file from the output directory and only re-add it when it is changed 
         /// to published
         /// </summary>
-        /// <param name="entries">A list of user generated entries (e.g. "welcome.html", "about.html")</param>
-        private void CleanOutputDirectory(List<string> entries)
+        /// <param name="newUserEntries">A list of user generated entries (e.g. "welcome.html", "about.html")</param>
+        private void CleanOutputDirectory(List<string> newUserEntries)
         {
-            if (entries != null)
+            if (newUserEntries != null)
             {
                 // Append application generated files
-                entries.Add($"{_config.IndexDestinationName}.html");
+                newUserEntries.Add($"{_config.IndexDestinationName}.html");
 
                 try
                 {
-                    IEnumerable<string> oldEntries =
-                        Directory.EnumerateFiles(_config.OutputDirIncRoot, "*html")
-                        .Select(Path.GetFileName);
+                    Directory.EnumerateFiles(_config.OutputDirIncRoot, "*html")
+                        .Select(Path.GetFileName).Except(newUserEntries, StringComparer.OrdinalIgnoreCase)
+                        .Select(x => _fileManager.DeleteFile(Path.Combine(_config.OutputDirIncRoot, x)));
 
-                    IEnumerable<string> deleteEntries = oldEntries.Except(
-                        entries, StringComparer.OrdinalIgnoreCase);
-
-                    if (deleteEntries.Any())
-                    {
-                        foreach (var entry in deleteEntries)
-                        {
-                            _fileManager.DeleteFile(Path.Combine(_config.OutputDirIncRoot, entry));
-                        }
-                    }
-
-                    _log.Info($"Cleaned output directory and deleted a total of {deleteEntries.Count()} unwanted entries");
+                    _log.Info($"Successfully cleaned the output directory: \"{_config.OutputDirIncRoot}\"");
                 }
                 catch (Exception)
                 {
-                    _log.Error("Unable to clean output directory. Please delete unwanted files manually");
+                    _log.Error($"Unable to clean the output directory: \"{_config.OutputDirIncRoot}\"");
                 }
             }
         }

@@ -34,24 +34,20 @@ namespace StaticWise.Compiler.Builders.Content
         bool BuildIndividualPage(Page page);
 
         /// <summary>
-        /// Build the archive as a series of individual pages (using pagination)
-        /// </summary>
-        /// <param name="posts">A list of posts, preferably in decending order by published date</param>
-        void BuildArchive(List<Post> posts);
-
-        /// <summary>
         /// Build an individual home page as a series of posts and save it to the output directory
         /// </summary>
         /// <param name="posts">A list of posts, preferably in decending order by published date</param>
-        /// <param name="fileNameWithoutExt">The name of the page (e.g. "index", or "page2")</param>
+        /// <param name="friendlyUrl">The name of the page (e.g. "index", or "page2")</param>
         /// <param name="currentPage">The number of the current page where the navigation is being displayed</param>
         /// <param name="totalPosts">The total number of posts</param>
+        /// <param name="paginationCount">The total number of posts to appear on the archive page</param>
         /// <param name="directoryName">The name of the directory to save the file (Optional)</param>
-        void BuildHomepage(
+        void BuildArchivePage(
             List<Post> posts,
-            string fileNameWithoutExt,
+            string friendlyUrl,
             int currentPage,
             int totalPosts,
+            int paginationCount,
             string directoryName = "");
     }
 }
