@@ -36,9 +36,9 @@ namespace StaticWise.Compiler.Components.PreviewPost
             if (!string.IsNullOrEmpty(publishedDateFormat) &&
                 !string.IsNullOrEmpty(publishedOnText))
             {
-                string publishedTime = post.Datetime.ToString(TIME_DATE_FORMAT);
+                string publishedTime = post.FileDate.ToString(TIME_DATE_FORMAT);
                 string publishedText = string.Format("{0}{1}",
-                    publishedOnText, post.Datetime.ToString(publishedDateFormat));
+                    publishedOnText, post.FileDate.ToString(publishedDateFormat));
 
                 builder.Append($"<time datetime=\"{publishedTime}\">{publishedText}</time>");
             }

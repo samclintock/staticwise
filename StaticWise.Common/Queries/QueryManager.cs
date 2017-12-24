@@ -59,7 +59,7 @@ namespace StaticWise.Common.Queries
             return result;
         }
 
-        List<Post> IQueryManager.SelectPosts(string path, int offset, int pageSize, bool incDraft, string sourceDateFormat)
+        List<Post> IQueryManager.SelectPosts(string path, int offset, int pageSize, bool incDraft)
         {
             List<Post> result = new List<Post>();
 
@@ -67,20 +67,17 @@ namespace StaticWise.Common.Queries
             {
                 try
                 {
-                    IEnumerable<string> files = Directory.GetFiles(path, $"*{MARKDOWN_EXT}",
-                        SearchOption.TopDirectoryOnly)
-                        .OrderByDescending(d => new FileInfo(d).CreationTime)
-                        .Skip(offset).Take(pageSize);
+                    SearchOption searchOption = SearchOption.TopDirectoryOnly;
 
                     if (incDraft)
-                        foreach (string file in files)
-                            result.Add(_deserializeManager.DeserializePost(file, sourceDateFormat));
-                    else
-                        foreach (string file in files)
-                        {
-                            Post post = _deserializeManager.DeserializePost(file, sourceDateFormat);
-                            if (!post.IsDraft) result.Add(post);
-                        }
+                        searchOption = SearchOption.AllDirectories;
+
+                    IEnumerable<string> files = Directory.GetFiles(path, $"*{MARKDOWN_EXT}",
+                        searchOption).OrderByDescending(d => new FileInfo(d).Name)
+                        .Skip(offset).Take(pageSize);
+
+                    foreach (string file in files)
+                        result.Add(_deserializeManager.DeserializePost(file));
                 }
                 catch
                 {
@@ -91,7 +88,7 @@ namespace StaticWise.Common.Queries
             return result;
         }
 
-        int IQueryManager.TotalPosts(string path, bool incDraft, string sourceDateFormat)
+        int IQueryManager.TotalPosts(string path, bool incDraft)
         {
             int result = 0;
 
@@ -99,17 +96,13 @@ namespace StaticWise.Common.Queries
             {
                 try
                 {
-                    IEnumerable<string> files = Directory.GetFiles(path, $"*{MARKDOWN_EXT}",
-                        SearchOption.TopDirectoryOnly);
+                    SearchOption searchOption = SearchOption.TopDirectoryOnly;
 
                     if (incDraft)
-                        result = files.Count();
-                    else
-                        foreach (string file in files)
-                        {
-                            Post post = _deserializeManager.DeserializePost(file, sourceDateFormat);
-                            if (!post.IsDraft) result++;
-                        }
+                        searchOption = SearchOption.AllDirectories;
+
+                    result = Directory.GetFiles(path, $"*{MARKDOWN_EXT}",
+                        searchOption).Count();
                 }
                 catch
                 {

@@ -89,7 +89,7 @@ namespace StaticWise.Compiler
 
                 // Get the total number of posts (exclude draft posts)
                 int totalPosts = _queryManager.TotalPosts(
-                    _config.PostsDirIncRoot, false, _config.Code.SourceDateFormat);
+                    _config.PostsDirIncRoot, false);
 
                 // Create a new archive directory (if one is necessary)
                 if (totalPosts > PAGE_SIZE)
@@ -98,7 +98,7 @@ namespace StaticWise.Compiler
                 do
                 {
                     List<Post> posts = _queryManager.SelectPosts(
-                        _config.PostsDirIncRoot, postOffset, PAGE_SIZE, false, _config.Code.SourceDateFormat);
+                        _config.PostsDirIncRoot, postOffset, PAGE_SIZE, false);
                     newUserEntries.AddRange(posts.Select(x => $"{x.FriendlyUrl}.html").ToArray());
                     totalPostResult = totalPostResult + contentBuilder.BuildPosts(posts);
                     lastPostCount = posts.Count();
@@ -127,12 +127,12 @@ namespace StaticWise.Compiler
                             PAGE_SIZE);
 
                     archiveCount++;
-                } while (lastPostCount >= PAGE_SIZE);
+                } while (lastPostCount > PAGE_SIZE);
 
                 CleanOutputDirectory(newUserEntries);
                 
                 List<Post> feedEntries = _queryManager.SelectPosts(
-                    _config.PostsDirIncRoot, 0, _config.FeedEntryCount, false, _config.Code.SourceDateFormat);
+                    _config.PostsDirIncRoot, 0, _config.FeedEntryCount, false);
 
                 IFeedBuilder feedBuilder = new FeedBuilder(_fileManager, _urlManager, _log, _config);
                 feedBuilder.BuildAtom(feedEntries);

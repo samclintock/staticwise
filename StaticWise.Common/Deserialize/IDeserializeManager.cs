@@ -15,9 +15,8 @@ namespace StaticWise.Common.Deserialize
         /// Deserialize a post file (including front matter) into a Post object
         /// </summary>
         /// <param name="filePath">The path and filename of the file (e.g. "C:\post.md")</param>
-        /// <param name="dateFormat">The date format to use when deserializing</param>
         /// <returns>A Post object that will contain all data stored in the file</returns>
-        Post DeserializePost(string path, string dateFormat);
+        Post DeserializePost(string path);
 
         /// <summary>
         /// Deserialize a page file (including front matter) into a Page object

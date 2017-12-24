@@ -1,9 +1,10 @@
 ﻿using StaticWise.Entities;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.Text.RegularExpressions;
 using StaticWise.Common.Files;
 using System.IO;
+using System.Globalization;
+using System;
 
 namespace StaticWise.Common.Deserialize
 {
@@ -12,6 +13,7 @@ namespace StaticWise.Common.Deserialize
         #region Constants
 
         private const string REGEX_FRONT_MATTER = @"^(\{[\s\S]*?\n\})(\s*\n)*";
+        private const string FILE_DATE_FORMAT = "yyyyMMdd";
 
         #endregion
 
@@ -58,9 +60,9 @@ namespace StaticWise.Common.Deserialize
             }
         }
 
-        Post IDeserializeManager.DeserializePost(string filePath, string dateFormat)
+        Post IDeserializeManager.DeserializePost(string filePath)
         {
-            if (string.IsNullOrEmpty(filePath) || string.IsNullOrEmpty(dateFormat))
+            if (string.IsNullOrEmpty(filePath))
                 return new Post();
 
             try
@@ -76,10 +78,23 @@ namespace StaticWise.Common.Deserialize
 
                 if (match.Success)
                 {
-                    Post post = JsonConvert.DeserializeObject<Post>(match.Value,
-                        new IsoDateTimeConverter { DateTimeFormat = dateFormat });
+                    Post post = JsonConvert.DeserializeObject<Post>(match.Value);
                     post.FileContent = content.Replace(match.Value, string.Empty);
+                    post.FileDate = File.GetCreationTime(filePath);
                     post.FilePath = filePath;
+
+                    // Get the filename
+                    string fileName = Path.GetFileName(filePath);
+
+                    if (fileName.Contains("-"))
+                    {
+                        // Get the published date as a string
+                        string publishedDateRaw = fileName.Substring(0, fileName.IndexOf('-'));
+
+                        if (DateTime.TryParseExact(publishedDateRaw, FILE_DATE_FORMAT,
+                            CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime publishedDate))
+                            post.FileDate = publishedDate;
+                    }
 
                     return post;
                 }

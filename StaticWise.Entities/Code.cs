@@ -48,8 +48,5 @@ namespace StaticWise.Entities
 
         [JsonProperty("readMoreText")]
         public string ReadMoreText { get; set; }
-
-        [JsonProperty("sourceDateFormat")]
-        public string SourceDateFormat { get; set; }
     }
 }

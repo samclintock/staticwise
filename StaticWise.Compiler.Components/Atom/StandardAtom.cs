@@ -49,7 +49,7 @@ namespace StaticWise.Compiler.Components.Atom
                 foreach (Post post in posts)
                 {
                     string link = _urlManager.CreateUrl(domainName, $"{post.FriendlyUrl}.html");
-                    b.Append($"<entry><id>{link}</id><title>{WebUtility.HtmlEncode(post.Title)}</title><author><name>{WebUtility.HtmlEncode(title)}</name></author><summary>{WebUtility.HtmlEncode(post.Description)}</summary><link rel=\"alternate\" type=\"text/html\" href=\"{link}\" /><updated>{post.Datetime.ToUniversalTime().ToString(RFC3339_DATE_FORMAT)}</updated></entry>");
+                    b.Append($"<entry><id>{link}</id><title>{WebUtility.HtmlEncode(post.Title)}</title><author><name>{WebUtility.HtmlEncode(title)}</name></author><summary>{WebUtility.HtmlEncode(post.Description)}</summary><link rel=\"alternate\" type=\"text/html\" href=\"{link}\" /><updated>{post.FileDate.ToUniversalTime().ToString(RFC3339_DATE_FORMAT)}</updated></entry>");
                 }
             }
 

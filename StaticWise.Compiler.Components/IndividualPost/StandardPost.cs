@@ -119,8 +119,8 @@ namespace StaticWise.Compiler.Components.IndividualPost
             if (!string.IsNullOrEmpty(config.Code.PublishedOnText) &&
                 !string.IsNullOrEmpty(config.Code.PublishedDateFormat))
             {
-                string publishedText = $"{config.Code.PublishedOnText}{post.Datetime.ToString(config.Code.PublishedDateFormat)}";
-                b.Append($"<time datetime=\"{post.Datetime.ToString(TIME_DATE_FORMAT)}\">{publishedText}</time>");
+                string publishedText = $"{config.Code.PublishedOnText}{post.FileDate.ToString(config.Code.PublishedDateFormat)}";
+                b.Append($"<time datetime=\"{post.FileDate.ToString(TIME_DATE_FORMAT)}\">{publishedText}</time>");
             }
 
             if (!string.IsNullOrEmpty(post.FileContent))
