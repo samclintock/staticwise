@@ -57,6 +57,9 @@ namespace StaticWise.Entities
         [JsonProperty("postsDirectory")]
         public string PostsDirExcRoot;
 
+        [JsonProperty("draftsDirectory")]
+        public string DraftsDirExcRoot;
+
         [JsonProperty("pagesDirectory")]
         public string PagesDirExcRoot;
 
@@ -88,6 +91,12 @@ namespace StaticWise.Entities
         public string PostsDirIncRoot
         {
             get { return Path.Combine(RootPath, PostsDirExcRoot); }
+        }
+
+        [JsonIgnore]
+        public string DraftsDirIncRoot
+        {
+            get { return Path.Combine(PostsDirIncRoot, DraftsDirExcRoot); }
         }
 
         [JsonIgnore]
