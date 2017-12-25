@@ -54,7 +54,7 @@ namespace StaticWise.Compiler.Components.IndividualPost
                 b.Append($"<meta name=\"description\" content=\"{post.Description}\" />");
 
             if (!string.IsNullOrEmpty(config.FeedDestinationName))
-                b.Append($"<link rel=\"alternate\" type=\"application/atom+xml\" title=\"Archive\" href=\"{config.FeedDestinationName}.xml\" />");
+                b.Append($"<link rel=\"alternate\" type=\"application/atom+xml\" title=\"Archive\" href=\"/{config.FeedDestinationName}.xml\" />");
 
             if (config.Meta != null && config.Meta.Any())
                 foreach (Meta meta in config.Meta)
@@ -72,7 +72,7 @@ namespace StaticWise.Compiler.Components.IndividualPost
                     }
 
             if (!string.IsNullOrEmpty(config.Favicon))
-                b.Append($"<link rel=\"icon\" href=\"{config.Favicon}\" />");
+                b.Append($"<link rel=\"icon\" href=\"/{config.Favicon}\" />");
 
             if (config.Scripts.ExternalCSS != null && config.Scripts.ExternalCSS.Any())
                 foreach (string css in config.Scripts.ExternalCSS)

@@ -25,7 +25,7 @@ namespace StaticWise.Compiler.Components.PreviewPost
         {
             StringBuilder builder = new StringBuilder();
 
-            string path = string.Format($"{post.FriendlyUrl}.html");
+            string path = string.Format($"/{post.FriendlyUrl}.html");
 
             builder.Append(containerOpenHtml);
             builder.Append(string.Concat(

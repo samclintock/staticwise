@@ -72,24 +72,31 @@ namespace StaticWise.Compiler
 
                 do
                 {
+                    // Get the current page set to process
                     List<Page> pages = _queryManager.SelectPages(
                         _config.PagesDirIncRoot, pageOffset, PAGE_SIZE);
+
+                    // Do not continue if there are no pages to process
+                    if (pages.Count() == 0)
+                        break;
+
                     newUserEntries.AddRange(pages.Select(x => $"{x.FriendlyUrl}.html").ToArray());
                     totalPageResult = totalPageResult + contentBuilder.BuildPages(pages);
                     lastPageCount = pages.Count();
                     pageOffset = pageOffset + lastPageCount;
                 } while (lastPageCount >= PAGE_SIZE);
 
-                int totalPostResult = 0, postOffset = 0, lastPostCount = 0, archiveCount = 1;
+                int totalPostResult = 0, postOffset = 0, lastPostCount = 0, archivePageCount = 1;
+                string postFileName = "index", postDirectoryName = string.Empty;
                 string archiveDirPath = Path.Combine(_config.OutputDirIncRoot,_config.ArchiveDirectoryName);
-
-                // Delete the archive directory, only if it already exists
-                if (_fileManager.IsExistingDirectory(archiveDirPath))
-                    _fileManager.DeleteDirectory(archiveDirPath);
 
                 // Get the total number of posts (exclude draft posts)
                 int totalPosts = _queryManager.TotalPosts(
                     _config.PostsDirIncRoot, false);
+
+                // Delete the archive directory, only if it already exists
+                if (_fileManager.IsExistingDirectory(archiveDirPath))
+                    _fileManager.DeleteDirectory(archiveDirPath);
 
                 // Create a new archive directory (if one is necessary)
                 if (totalPosts > PAGE_SIZE)
@@ -97,36 +104,38 @@ namespace StaticWise.Compiler
 
                 do
                 {
+                    // Get the current post set to process
                     List<Post> posts = _queryManager.SelectPosts(
                         _config.PostsDirIncRoot, postOffset, PAGE_SIZE, false);
+
+                    // Do not continue if there are no posts to process
+                    if (posts.Count() == 0)
+                        break;
+
                     newUserEntries.AddRange(posts.Select(x => $"{x.FriendlyUrl}.html").ToArray());
                     totalPostResult = totalPostResult + contentBuilder.BuildPosts(posts);
                     lastPostCount = posts.Count();
                     postOffset = postOffset + lastPostCount;
-                    
-                    /*
-                     * Either save a new archive page, (e.g. 
-                     * "archive/page2.html"), or save the file 
-                     * as the blog, news or homepage (e.g. 
-                     * "index.html").
-                     */
-                    if (archiveCount > 1)
-                        contentBuilder.BuildArchivePage(
-                            posts,
-                            $"{_config.ArchivePageName}{archiveCount}",
-                            archiveCount,
-                            totalPosts,
-                            PAGE_SIZE,
-                            _config.ArchiveDirectoryName);
-                    else
-                        contentBuilder.BuildArchivePage(
-                            posts,
-                            _config.IndexDestinationName,
-                            archiveCount,
-                            totalPosts,
-                            PAGE_SIZE);
 
-                    archiveCount++;
+                    /*
+                     * Either save a new archive page, (e.g. "archive/page2.html"), or save the file 
+                     * as the blog, news or homepage (e.g. "index.html").
+                     */
+                    if (archivePageCount > 1)
+                    {
+                        postFileName = $"{_config.ArchivePageName}{archivePageCount}";
+                        postDirectoryName = _config.ArchiveDirectoryName;
+                    }
+
+                    contentBuilder.BuildArchivePage(
+                        posts,
+                        postFileName,
+                        archivePageCount,
+                        totalPosts,
+                        PAGE_SIZE,
+                        postDirectoryName);
+
+                    archivePageCount++;
                 } while (lastPostCount > PAGE_SIZE);
 
                 CleanOutputDirectory(newUserEntries);

@@ -41,13 +41,13 @@ namespace StaticWise.Compiler.Builders.Content
         /// <param name="currentPage">The number of the current page where the navigation is being displayed</param>
         /// <param name="totalPosts">The total number of posts</param>
         /// <param name="paginationCount">The total number of posts to appear on the archive page</param>
-        /// <param name="directoryName">The name of the directory to save the file (Optional)</param>
+        /// <param name="directoryName">The name of the directory to save the file</param>
         void BuildArchivePage(
             List<Post> posts,
             string friendlyUrl,
             int currentPage,
             int totalPosts,
             int paginationCount,
-            string directoryName = "");
+            string directoryName);
     }
 }
