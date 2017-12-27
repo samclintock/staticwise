@@ -18,7 +18,7 @@ namespace StaticWise.Compiler
     {
         #region Constants
 
-        int PAGE_SIZE = 5;
+        int PAGE_SIZE = 10;
 
         #endregion
 
@@ -136,7 +136,7 @@ namespace StaticWise.Compiler
                         postDirectoryName);
 
                     archivePageCount++;
-                } while (lastPostCount > PAGE_SIZE);
+                } while (lastPostCount >= PAGE_SIZE);
 
                 CleanOutputDirectory(newUserEntries);
                 

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace StaticWise.Compiler.Components.Pagination
 {
@@ -33,40 +34,33 @@ namespace StaticWise.Compiler.Components.Pagination
             if (!string.IsNullOrEmpty(archiveDirectoryName))
                 archiveDirectoryName = archiveDirectoryName + "/";
 
+            int totalPages = (int)Math.Ceiling(totalPosts / (decimal)paginationCount);
+            int start = currentPage, end = (totalPages == 0) ? 1 : totalPages;
+
             if (currentPage == 2)
+            {
                 b.Append($"{itemOpenHtml}<a href=\"/{firstFileName}.html\">Previous</a>{itemCloseHtml}");
+                start = start - 1;
+            }
             else if (currentPage > 2)
+            {
                 b.Append($"{itemOpenHtml}<a href=\"/{archiveDirectoryName + archiveFileName + (currentPage - 1)}.html\">Previous</a>{itemCloseHtml}");
-
-            int start = 0, end = totalPosts;
-
-            if (totalPosts > PAGES_TO_DISPLAY)
-            {
-                start = currentPage - 5;
-                end = currentPage + 5;
-
-                if (start < 0)
-                {
-                    start = 0;
-                    end = start + 10;
-                }
-
-                if (end > totalPosts)
-                {
-                    end = totalPosts;
-                    start = totalPosts - 10;
-                }
+                start = start - 2;
             }
 
-            for (int i = start; i < end; i++)
+            int pageCount = 0;
+            for (int i = start; i <= end; i++)
             {
-                if ((i + 1) == currentPage)
-                    b.Append($"{itemOpenHtml}{(i+1)}{itemCloseHtml}");
+                if (i == currentPage)
+                    b.Append($"{itemOpenHtml}{(i)}{itemCloseHtml}");
                 else
-                    b.Append($"{itemOpenHtml}<a href=\"/{(((i+1) == 1) ? firstFileName : archiveDirectoryName + archiveFileName + (i+1))}.html\">{(i+1)}</a>{itemCloseHtml}");
+                    b.Append($"{itemOpenHtml}<a href=\"/{((i == 1) ? firstFileName : archiveDirectoryName + archiveFileName + i)}.html\">{i}</a>{itemCloseHtml}");
+
+                if (pageCount == 9) break;
+                pageCount++;
             }
 
-            if (totalPosts > currentPage)
+            if (currentPage < totalPages)
                 b.Append($"{itemOpenHtml}<a href=\"/{archiveDirectoryName + archiveFileName + (currentPage + 1)}.html\">Next</a>{itemCloseHtml}");
 
             b.Append(containerCloseHtml);
