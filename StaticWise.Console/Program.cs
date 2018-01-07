@@ -3,7 +3,6 @@ using StaticWise.Entities;
 using StaticWise.Compiler.Utilities.Logger;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using StaticWise.Common.Files;
 using StaticWise.Common.Deserialize;
 using StaticWise.Common.Queries;
@@ -14,56 +13,94 @@ namespace StaticWise
 {
     class Program
     {
+        #region Properties
+
+        // Initialize a message to introduce the application to the user
+        static string _welcome = @" _____ _        _   _      _    _ _
+/  ___| |      | | (_)    | |  | (_)
+\ `--.| |_ __ _| |_ _  ___| |  | |_ ___  ___ 
+ `--. \ __/ _` | __| |/ __| |/\| | / __|/ _ \
+/\__/ / || (_| | |_| | (__\  /\  / \__ \  __/
+\____/ \__\__,_|\__|_|\___|\/  \/|_|___/\___|
+
+Welcome to StaticWise. An open source static blog generator built for Windows 10.
+For more information, please visit this project on GitHub at https://github.com/stevenmclintock/staticwise.";
+
+        // Initialize the required manager objects
+        static IFileManager _fileManager = new FileManager();
+        static IDeserializeManager _deserializeManager = new DeserializeManager(_fileManager);
+        static IQueryManager _queryManager = new QueryManager(_deserializeManager, _fileManager);
+        static IUrlManager _urlManager = new UrlManager();
+
+        // Initialize a logger object
+        static ILogger _log = new Logger();
+
+        #endregion
+
+        #region Methods
+
         static void Main(string[] args)
         {
+            // Output a welcome message to the console window
+            Console.WriteLine(_welcome);
+
+            // Initialize an empty configuration object
+            Config config = new Config();
+
+            do
+            {
+                // Prompt the user to enter the path to the JSON configuration file
+                Console.WriteLine("\nPlease enter the path of your JSON configuration file:");
+                string pathToConfig = Console.ReadLine();
+
+                // Deserialize the JSON file to a configuration object
+                if (!string.IsNullOrEmpty(pathToConfig))
+                    config = _deserializeManager.DeserializeConfig(pathToConfig);
+
+                // Determine if the configuration object is validate or not
+                if (!string.IsNullOrWhiteSpace(config.FilePath))
+                    Console.WriteLine($"\nThe JSON configuration file for \"{config.Title}\" is ready to use.");
+                else
+                    Console.WriteLine("\nUnable to open the JSON configuration file. Please try again.");
+            }
+            while (string.IsNullOrWhiteSpace(config.FilePath));
+
+            // Prompt the user to build the blog using the configuration object
+            Console.WriteLine($"Press the ENTER key to build the static blog.");
+
+            // Exit the console application if the ENTER key was not read
+            if (!Console.ReadKey().Key.Equals(ConsoleKey.Enter)) Environment.Exit(0);
+
+            // Start a timer
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            ILogger log = new Logger();
-            string pathToConfig = args.ElementAtOrDefault(0);
-
-            if (!string.IsNullOrEmpty(pathToConfig))
+            try
             {
-                IFileManager fileManager = new FileManager();
-                IDeserializeManager deserializeManager = new DeserializeManager(fileManager);
-                IQueryManager queryManager = new QueryManager(deserializeManager, fileManager);
-                IUrlManager urlManager = new UrlManager();
-
-                Config config = deserializeManager.DeserializeConfig(pathToConfig);
-
-                try
-                {
-                    Compile compile = new Compile(
-                        config,
-                        log,
-                        fileManager,
-                        queryManager,
-                        urlManager);
-                    compile.Build();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Unexpected Error: {ex.Message}");
-                }
+                // Initialize the compile object and build the blog using the configuration object
+                Compile compile = new Compile(config, _log, _fileManager, _queryManager, _urlManager);
+                compile.Build();
             }
-            else
-                log.Error("No parameter for a configuration file path was found");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected Error: {ex.Message}");
+            }
 
+            // Stop the timer
             sw.Stop();
 
-            List<LogEntry> logEntries = log.GetEntries();
-            if (logEntries.Any())
-            {
-                foreach (LogEntry logEntry in logEntries)
-                {
-                    Console.WriteLine(string.Format("{0}: {1}",
-                        logEntry.Status.ToString(), logEntry.Message));
-                }
-            }
+            // Get the log entries generated by the compile object
+            List<LogEntry> logEntries = _log.GetEntries();
 
-            Console.WriteLine("Time elapsed: {0}", sw.Elapsed);
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadLine();
+            // Output the log entries to the console window
+            Console.WriteLine("\n=============\nLog Entries\n=============\n");
+            if (logEntries != null) logEntries.ForEach(x => Console.WriteLine($"{x.Status.ToString()}: {x.Message}"));
+
+            // Output the time elapsed to the console window
+            Console.WriteLine($"Time elapsed: {sw.Elapsed}\n\nPress any key to continue...");
+            Console.Read();
         }
+
+        #endregion
     }
 }
