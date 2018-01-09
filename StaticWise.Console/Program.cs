@@ -23,7 +23,7 @@ namespace StaticWise
 /\__/ / || (_| | |_| | (__\  /\  / \__ \  __/
 \____/ \__\__,_|\__|_|\___|\/  \/|_|___/\___|
 
-Welcome to StaticWise. An open source static blog generator built for Windows 10.
+Welcome to StaticWise. An open source static blog generator built using .NET and C#.
 For more information, please visit this project on GitHub at https://github.com/stevenmclintock/staticwise.";
 
         // Initialize the required manager objects
