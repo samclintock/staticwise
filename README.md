@@ -1,4 +1,4 @@
-# StaticWise - A Static Blog Generator #
+# StaticWise - Static Blog Generator #
 
 Welcome to StaticWise. An open source static blog generator built using .NET and C#.
 
