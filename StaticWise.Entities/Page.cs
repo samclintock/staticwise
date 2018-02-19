@@ -12,9 +12,6 @@ namespace StaticWise.Entities
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        [JsonProperty("isDraft")]
-        public bool IsDraft { get; set; }
         
         [JsonIgnore]
         public string FileContent { get; set; }
