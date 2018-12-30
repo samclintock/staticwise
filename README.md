@@ -173,7 +173,3 @@ Please use the document structure below for StaticWise to consume [Markdown](htt
 # Contributions #
 
 Please contribute to the source code and make StaticWise even better than it is today! If you would like to contribute, please submit a new issue or pull request.
-
-# Contact #
-
-Please contact [@samclintock](https://www.twitter.com/samclintock "Steven McLintock on Twitter") if you have any questions or feedback.
